@@ -27,7 +27,30 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.filename)?;
     let lines = get_lines_vec(&contents);
 
+    // YOUR CODE HERE!
+    for line in lines {
+        parse_command(line)
+    }
+
     Ok(())
+}
+
+fn parse_command(command: &str) -> (&str, u32) {
+    let command_chars = command.chars().collect();
+    let mut cmd: &str;
+    for (pos, c) in chars {
+        if c != '' {
+            cmd += c;
+        } else {
+            let temp = command[pos + 1..cmd.len()+1]
+            let int: u32 = temp.parse().unwrap();
+        }
+    }
+    (cmd, int)
+}
+
+fn adjust_dist(units: u32) -> u32 {
+    0
 }
 
 fn get_lines_vec(content: &str) -> Vec<u32> {

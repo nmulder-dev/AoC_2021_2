@@ -1,7 +1,6 @@
 use std::error::Error;
 use std::fs;
 use std::env;
-use std::thread::LocalKey;
 
 pub struct Config {
     filename: String,

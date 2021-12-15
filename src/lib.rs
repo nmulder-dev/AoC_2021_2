@@ -1,9 +1,15 @@
 use std::error::Error;
 use std::fs;
 use std::env;
+use std::thread::LocalKey;
 
 pub struct Config {
     filename: String,
+}
+
+struct Location {
+    distance: u32,
+    depth: u32
 }
 
 impl Config {
@@ -28,34 +34,45 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let lines = get_lines_vec(&contents);
 
     // YOUR CODE HERE!
+    let mut loc = Location {
+        distance: 0,
+        depth: 0,
+    };
+
     for line in lines {
-        parse_command(line)
+        let (dir, dist) = parse_command(line);
+        if dir == "forward" {
+            loc.distance += dist;
+        } else if dir == "up"{
+            loc.depth -= dist;
+        } else {    //dir == "down"
+            loc.depth += dist;
+        }
     }
 
+    println!("Result: {}", loc.depth * loc.distance);
     Ok(())
 }
 
-fn parse_command(command: &str) -> (&str, u32) {
-    let command_chars = command.chars().collect();
-    let mut cmd: &str;
-    for (pos, c) in chars {
-        if c != '' {
-            cmd += c;
+fn parse_command(command: &str) -> (String, u32) {
+    let mut cmd: String = String::new();
+    let mut int: u32 = 0;
+    for (pos, c) in command.chars().enumerate() {
+        if c != ' ' {
+            cmd.push(c);
         } else {
-            let temp = command[pos + 1..cmd.len()+1]
-            let int: u32 = temp.parse().unwrap();
+            let temp = &command[pos+1..];
+            int = temp.parse::<u32>().unwrap();
+            break;
         }
     }
-    (cmd, int)
+    
+    (cmd,int)
 }
 
-fn adjust_dist(units: u32) -> u32 {
-    0
-}
-
-fn get_lines_vec(content: &str) -> Vec<u32> {
+fn get_lines_vec(content: &str) -> Vec<&str> {
     // collect lines of content and return it
-    content.lines().map(|l| l.parse::<u32>().unwrap()).collect()
+    content.lines().collect()
 }
 
 #[cfg(test)]

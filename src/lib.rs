@@ -8,7 +8,8 @@ pub struct Config {
 
 struct Location {
     distance: u32,
-    depth: u32
+    depth: u32,
+    aim: u32,
 }
 
 impl Config {
@@ -36,16 +37,18 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let mut loc = Location {
         distance: 0,
         depth: 0,
+        aim: 0,
     };
 
     for line in lines {
         let (dir, dist) = parse_command(line);
         if dir == "forward" {
             loc.distance += dist;
+            loc.depth += loc.aim * dist;
         } else if dir == "up"{
-            loc.depth -= dist;
+            loc.aim -= dist;
         } else {    //dir == "down"
-            loc.depth += dist;
+            loc.aim += dist;
         }
     }
 
